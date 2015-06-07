@@ -1,0 +1,30 @@
+CLASSES = BlockI.java \
+	BlockJ.java \
+	BlockL.java \
+	BlockO.java \
+	BlockS.java \
+	BlockT.java \
+	BlockZ.java \
+	Configuration.java \
+	FileData.java \
+	GameField.java \
+	MenuListener.java \
+	PauseUnpause.java \
+	PlayingField.java \
+	SecondPanel.java \
+	TetrisBlock.java \
+	TetrisMain.java \
+	TetrisMenu.java \
+	TetrisMove.java \
+	TetrisSquare.java \
+	TetrisView.java \
+	Wyjscie.java
+ 
+classfiles  = $(CLASSES:.java=.class)
+#classfiles = Simple3.class Simple2.class Simple1.class
+ 
+all: $(classfiles)
+%.class: %.java
+	javac -d . -classpath . $<
+clean:
+	rm -f *.class

@@ -1,0 +1,2 @@
+Tetris.jar: *.java
+	jar cf Tetris.jar manifest.mf *.java
