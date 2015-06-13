@@ -15,6 +15,7 @@ public class TetrisView extends JFrame
 	private static final long serialVersionUID = 1L;
 	private GameField g;
 	private SecondPanel sp;
+	
 	public TetrisView()
 	{
 		/**Funkcja tworzy nowe okno gry tetris, w podanej za pomocą setBounds odległości w pikselach od górnego lewego rogu ekranu oraz podaje jego defaultowe rozmiary
@@ -27,9 +28,8 @@ public class TetrisView extends JFrame
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		getContentPane().setLayout(new GridBagLayout());
-		setJMenuBar(new TetrisMenu(this));
-        Configuration conf = new Configuration();
-        
+		Configuration conf = new Configuration();
+        setJMenuBar(new TetrisMenu(this));
         /**Opis rozkładu komponentów: głównej planszy gry oraz panelu bocznego wewnątrz okna
          * Parametry gridx oraz gridy określają położenie lewego górnego rogu komponentu
          * Parametry weightx i weighty okreslają wagę komponentu wewnątrz okna
@@ -47,7 +47,7 @@ public class TetrisView extends JFrame
                         c.gridheight = 1;
 		g = new GameField(conf);
                     this.getContentPane().add(g, c);
-		sp = new SecondPanel(this);
+		sp = new SecondPanel(this, conf);
 		c.fill = GridBagConstraints.BOTH;
 		
 		c.gridx = 6;

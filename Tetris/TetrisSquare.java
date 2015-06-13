@@ -57,4 +57,16 @@ public class TetrisSquare {
 	{
 		color = c;
 	}
+	public double getX()
+	{
+		return x;
+	}
+	
+	public void push(double a, boolean rL)
+	{
+		a = (rL) ? a : -a;
+		x += a;
+		r.setRect(x, y, a,a);
+	}
+	
 }

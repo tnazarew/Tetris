@@ -16,20 +16,23 @@ import java.awt.Paint;
  * W klasie znajdują się dwie pętle for po zmiennej iteracyjnej i (i rośnie od 0 do 3) które wywołują 4 razy metody odpowiedzialne za rysowanie klocka
  */
 
-public class TetrisBlock 
+public abstract class TetrisBlock 
 {
 
 	double anchorX;
 	double anchorY;
 	boolean visible;
-	private double x;
-	private double y;
-	private double a;
+	protected boolean takenOutside;
+	protected double x;
+	protected double y;
+	protected double a;
 	private Paint color;
-	private int nums[]; /// 
+	protected int nums[]; /// 
+	protected enum state {down, right, left, up} 
+	protected state rotation;
 	//private Rectangle2D rec[];
-	private TetrisSquare[] sq;
-	TetrisBlock(int fi, int s, int t, int fo, double xx, double yy, double aa, Paint c)
+	protected TetrisSquare[] sq;
+	TetrisBlock(int fi, int s, int t, int fo, double xx, double yy, double aa, Paint c, boolean to)
 	{
 		color = c;
 		visible= true;
@@ -44,7 +47,7 @@ public class TetrisBlock
 		nums[2] = t;
 		nums[3] = fo;
 		sq = new TetrisSquare[4];
-		
+		takenOutside = to;
 		for (int i = 0; i < 4; i ++)
 		{
 			sq[i] = new TetrisSquare(color, x + a*(nums[i]%3),y + a*(nums[i]/3),a);
@@ -75,8 +78,16 @@ public class TetrisBlock
 		a = aa;
 		for(int i = 0; i < 4; i++)
 		{
-			sq[i].update(x + a*(nums[i]%3),y + a*(nums[i]/3),a);
+			if(takenOutside && i == 3)
+				sq[i].update(x + a*((nums[i]%3) + 1),y + a*(nums[i]/3),a);
+			else
+				sq[i].update(x + a*(nums[i]%3),y + a*(nums[i]/3),a);
 		}
+	}
+	
+	public void updateX()
+	{
+		
 	}
 	
 	public void moveDown()
@@ -84,7 +95,10 @@ public class TetrisBlock
 		y++;
 		for(int i = 0; i < 4; i++)
 		{
-			sq[i].update(x + a*(nums[i]%3),y + a*(nums[i]/3) ,a);
+			if(takenOutside && i == 3)
+				sq[i].update(x + a*((nums[i]%3) + 1),y + a*(nums[i]/3),a);
+			else
+				sq[i].update(x + a*(nums[i]%3),y + a*(nums[i]/3),a);
 		}
 	}
 	
@@ -102,8 +116,10 @@ public class TetrisBlock
 		for(int i = 0; i < 4; i++)
 		{
 			d[2*i] = x + a*(nums[i]%3);
-			d[2*i+1] = y + a*(nums[i]/3);
+			d[2*i+1] = y + a*(nums[i]/3);	
 		}
+		if(takenOutside)
+			d[6] += a;
 		return d;
 	}
 	
@@ -111,4 +127,66 @@ public class TetrisBlock
 	{
 		return color;
 	}
+	
+	public void setTakeOutside(boolean b)
+	{
+		this.takenOutside = b;
+	}
+	public abstract void turn();
+	
+	public void keepInBounds()
+	{
+		if(maxX() > anchorX + 19*a)
+			moveSide(false);
+		if(minX() < anchorX)
+			moveSide(true);
+	}
+	
+	public void moveSide(boolean rightLeft)
+	{
+		if(maxX() + a > anchorX + 9*a && rightLeft)
+		{
+			System.out.println(maxX());
+			System.out.println(anchorX);
+			System.out.println(a);
+		}
+		if((maxX() + a <= anchorX + 9*a && rightLeft) || (minX() - a >= anchorX && !rightLeft))
+		{
+			double aa = (rightLeft) ? a : -a;
+			System.out.println(x);
+			x+=aa;
+			System.out.println(x);
+			for(int i = 0; i < 4; i++)
+			{
+				if(takenOutside && i == 3)
+					sq[i].update(x + a*((nums[i]%3) + 1),y + a*(nums[i]/3),a);
+				else
+					sq[i].update(x + a*(nums[i]%3),y + a*(nums[i]/3),a);
+			}
+		}
+	}
+	public double maxX()
+	{
+		double max = 0;
+		double d[] = getCoordinates();
+		for(int i = 0; i < d.length ; i+=2)
+		{
+			
+			max = (max < d[i]) ? d[i] : max;
+		}
+		return max;
+	}
+	
+	public double minX()
+	{
+		double min = 100000;
+		double d[] = getCoordinates();
+		for(int i = 0; i < d.length ; i+=2)
+		{
+			min = (min > d[i]) ? d[i] : min;
+		}
+		return min;
+	}
+	
+	
 }

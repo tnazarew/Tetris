@@ -13,13 +13,16 @@ import javax.swing.JMenuItem;
 @SuppressWarnings("serial")
 public class TetrisMenu extends JMenuBar
 {
+	public int liczpoz;
 	TetrisMenu(TetrisView tv)
 	{
-					    
-		JMenuItem easy = new JMenuItem("easy");
-        JMenuItem normal = new JMenuItem("normal");
-        JMenuItem hard = new JMenuItem("hard");
-        JMenu animation = new JMenu("ANIMACJA");
+		//this.liczpoz=conf.liczba_poziomow;
+		
+		JMenuItem  easy = new JMenuItem("(1) - łatwy");
+		JMenuItem normal = new JMenuItem("(2) - średni");
+		JMenuItem hard = new JMenuItem("(3) - trudny");
+	
+        JMenu animation = new JMenu("GRA");
         JMenuItem on = new JMenuItem("ON");
         JMenuItem off = new JMenuItem("OFF");
         MenuListener l = new MenuListener(tv);
@@ -30,15 +33,14 @@ public class TetrisMenu extends JMenuBar
         easy.addActionListener(l);
         normal.addActionListener(l);
         hard.addActionListener(l);
-        JMenu menu = new JMenu("menu");
+        JMenu menu = new JMenu("Wybór poziomu");
         menu.add(easy);
         menu.add(normal);
         menu.add(hard);
         add(menu);
-        add(animation);
+		add(animation);
+		       
 	}	
-	
-	
-	
+
 	
 }

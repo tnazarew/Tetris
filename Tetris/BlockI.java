@@ -12,7 +12,13 @@ public class BlockI extends TetrisBlock
 	BlockI( double dW, double dH,
 			double aa) 
 	{
-		super(0,3,6,9, dW, dH, aa, Color.RED);
+		super(0,3,6,9, dW, dH, aa, Color.RED, true);
+		
+	}
+	
+	
+	public void turn()
+	{
 		
 	}
 

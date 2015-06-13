@@ -11,10 +11,11 @@ import java.io.IOException;
 
 public class Configuration {
 	
+	//public int liczba_poziomow=0;
 	public int nr_poziomu=0;
 	public int liczba_kloc=0;
 	public int x_kloc[];
-        public int y_kloc[];
+    public int y_kloc[];
 	//public int tempo=0;
 	
 	public Configuration (){
@@ -27,6 +28,7 @@ public class Configuration {
 			e1.printStackTrace();
 		}
 		try {
+			//this.liczba_poziomow = Integer.parseInt(config2.getSetting("LICZBA POZIOMOW"));
 			this.nr_poziomu = Integer.parseInt(config2.getSetting("NUMER POZIOMU"));
 			this.liczba_kloc = Integer.parseInt(config2.getSetting("LICZBA KLOCKOW"));
 			x_kloc = new int[liczba_kloc];
@@ -40,7 +42,6 @@ public class Configuration {
             	System.out.println(liczba_kloc);
             	System.out.println(sx[j]);
                 this.x_kloc[j] = Integer.parseInt(sx[j]);
-                System.out.println("haha");
                 this.y_kloc[j] = Integer.parseInt(sy[j]);
                 
             }

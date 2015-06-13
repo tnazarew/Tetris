@@ -2,7 +2,9 @@ package Tetris;
 
 public class TetrisMove extends Thread
 {
-	PlayingField p;
+	private PlayingField p;
+	private double speed;
+	private double height;
 	TetrisMove(PlayingField pf)
 	{
 		p = pf;
@@ -21,4 +23,15 @@ public class TetrisMove extends Thread
 			}
 		}
 	}
+	
+	public void setSpeed(double s)
+	{
+		speed = s;
+	}
+	
+	public void setHeight(double h)
+	{
+		height = h;
+	}
 }
+

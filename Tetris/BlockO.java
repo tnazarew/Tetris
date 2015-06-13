@@ -13,8 +13,11 @@ public class BlockO extends TetrisBlock
 
 	BlockO(double dW, double dH, double aa) 
 	{
-		super(0,1,3,4, dW, dH, aa, Color.ORANGE);
+		super(0,1,3,4, dW, dH, aa, Color.ORANGE, false);
+	}
+	
+	public void turn()
+	{
 		
 	}
-
 }

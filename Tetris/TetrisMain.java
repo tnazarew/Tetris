@@ -1,5 +1,5 @@
 /**Gra Tetris - projekt w ramach przedmiotu PROZE
- * @author Luiza Czerwińska, Bartłomiej Szymański
+ * @author Luiza Czerwińska
  */
 package Tetris;
 
@@ -34,4 +34,4 @@ public class TetrisMain
 	
 
 	
-}				
+}		

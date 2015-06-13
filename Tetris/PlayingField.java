@@ -10,6 +10,7 @@ public class PlayingField
 	private int highestPoint[];
 	private GameField gF;
 	private TetrisMove tm;
+
 	private boolean animationOn;
 	private double pushX;
 	private double pushY;
@@ -28,6 +29,7 @@ public class PlayingField
 		pushY = pY;
 		width = w;
 		height = h;
+		
 		tB = new BlockO(pushX, pushY, width/10+1);
 		tB.setVisible(true);
 		this.highestPoint = new int[10];
@@ -201,5 +203,15 @@ public class PlayingField
 	{
 		//TODO
 		
+	}
+	
+	public void moveSide(boolean rightLeft)
+	{
+		tB.moveSide(rightLeft);
+	}
+	
+	public void turn()
+	{
+		tB.turn();
 	}
 }

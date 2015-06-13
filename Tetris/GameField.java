@@ -2,9 +2,14 @@ package Tetris;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
-
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 /**Klasa GameField (dziedzicząca po JPanel) odpowiada za opis okna gry
  * W klasie zawarte są metody rysujące zarówno samo okno jak i kilka przykładowych klocków
@@ -22,6 +27,15 @@ public class GameField extends JPanel
     public int ykloc[];
     public int liczkloc;
     private PlayingField pF;
+	//private MoveKeyListener m;
+	//private static final String MOVE_UP = "move up";
+   // private static final String MOVE_DOWN = "move down";
+    private static final String  MOVE_LEFT = "move left";
+    private static final String  MOVE_RIGHT	= "move right";
+	
+	
+	
+	
 	public GameField(Configuration conf)
 	{
 		additionalWidth = 0;
@@ -33,12 +47,25 @@ public class GameField extends JPanel
 
         System.arraycopy(conf.x_kloc, 0, this.xkloc, 0, this.liczkloc);
         System.arraycopy(conf.y_kloc, 0, this.ykloc, 0, this.liczkloc);
+        setFocusable(true);
+
+        InputMap im = getInputMap(WHEN_FOCUSED);
+        ActionMap am = getActionMap();
+        
         
 
         
         pF = new PlayingField(this,this.getWidth() - this.additionalWidth, this.getHeight() - this.additionalHeight, this.additionalWidth/2, this.additionalHeight/2, xkloc, ykloc);
-
-       /* xkloc=new int [this.liczkloc];
+        //m = new MoveKeyListener();
+		//m.setPlayingField(pF);
+		//this.addKeyListener(m);
+       
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), MOVE_LEFT);
+        am.put(MOVE_LEFT, new MoveLeftAction(pF));
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), MOVE_RIGHT);
+        am.put(MOVE_RIGHT, new MoveRightAction(pF));
+        
+        /* xkloc=new int [this.liczkloc];
         ykloc=new int [this.liczkloc];
         
         for(int i=0;i<liczkloc;i++)
@@ -53,7 +80,44 @@ public class GameField extends JPanel
          * 
          * 
          */
-        }
+	}
+	protected class MoveLeftAction extends AbstractAction
+	{
+		protected PlayingField p;
+		public MoveLeftAction(PlayingField pf)
+		{
+			p = pf;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			p.moveSide(false);
+			System.out.println("LEWO");
+		}
+		
+		
+	}
+	
+	protected class MoveRightAction extends AbstractAction
+	{
+		protected PlayingField p;
+		public MoveRightAction(PlayingField pf)
+		{
+			p = pf;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			p.moveSide(true);
+			System.out.println("PRAWO");
+		}
+		
+		
+	}
+	
+	
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
