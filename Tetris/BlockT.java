@@ -46,7 +46,7 @@ public class BlockT extends TetrisBlock
 			nums[1] = 7;
 			nums[2] = 8;
 			nums[3] = 4;
-			rotation = state.down;
+			rotation = state.up;
 			break;
 		}
 		for(int i = 0; i < 4; i++)

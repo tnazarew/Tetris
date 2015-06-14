@@ -27,7 +27,6 @@ public class MoveKeyListener implements KeyListener
     			break;
     		case KeyEvent.VK_D:
     			p.moveSide(true);
-    			System.out.print("chuj");
     			break;
     		}
     	}

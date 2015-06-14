@@ -48,6 +48,7 @@ public abstract class TetrisBlock
 		nums[3] = fo;
 		sq = new TetrisSquare[4];
 		takenOutside = to;
+		rotation = state.down;
 		for (int i = 0; i < 4; i ++)
 		{
 			sq[i] = new TetrisSquare(color, x + a*(nums[i]%3),y + a*(nums[i]/3),a);
@@ -84,15 +85,11 @@ public abstract class TetrisBlock
 				sq[i].update(x + a*(nums[i]%3),y + a*(nums[i]/3),a);
 		}
 	}
+
 	
-	public void updateX()
+	public void moveDown(double yy)
 	{
-		
-	}
-	
-	public void moveDown()
-	{
-		y++;
+		y+=yy;
 		for(int i = 0; i < 4; i++)
 		{
 			if(takenOutside && i == 3)
@@ -132,13 +129,14 @@ public abstract class TetrisBlock
 	{
 		this.takenOutside = b;
 	}
+	
 	public abstract void turn();
 	
 	public void keepInBounds()
 	{
-		if(maxX() > anchorX + 19*a)
+		while(maxX() > anchorX + 9*a)
 			moveSide(false);
-		if(minX() < anchorX)
+		while(minX() < anchorX)
 			moveSide(true);
 	}
 	
@@ -186,6 +184,11 @@ public abstract class TetrisBlock
 			min = (min > d[i]) ? d[i] : min;
 		}
 		return min;
+	}
+	public void fastFall()
+	{
+		moveDown(a);
+
 	}
 	
 	

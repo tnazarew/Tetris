@@ -3,8 +3,6 @@ package Tetris;
 public class TetrisMove extends Thread
 {
 	private PlayingField p;
-	private double speed;
-	private double height;
 	TetrisMove(PlayingField pf)
 	{
 		p = pf;
@@ -12,26 +10,24 @@ public class TetrisMove extends Thread
 	@Override
 	public void run()
 	{
+		try {
+			sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		while(true)
 		{
-			p.move();
+			p.move(1.0);
 			try {
-				sleep(20);
+				
+				sleep((long) ((20000/(1+p.getHeight()))));
+				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public void setSpeed(double s)
-	{
-		speed = s;
-	}
-	
-	public void setHeight(double h)
-	{
-		height = h;
 	}
 }
 

@@ -57,6 +57,10 @@ public class TetrisSquare {
 	{
 		color = c;
 	}
+	public Paint getColor()
+	{
+		return color;
+	}
 	public double getX()
 	{
 		return x;

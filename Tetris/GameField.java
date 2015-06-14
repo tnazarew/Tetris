@@ -28,8 +28,8 @@ public class GameField extends JPanel
     public int liczkloc;
     private PlayingField pF;
 	//private MoveKeyListener m;
-	//private static final String MOVE_UP = "move up";
-   // private static final String MOVE_DOWN = "move down";
+	private static final String MOVE_UP = "move up";
+    private static final String MOVE_DOWN = "move down";
     private static final String  MOVE_LEFT = "move left";
     private static final String  MOVE_RIGHT	= "move right";
 	
@@ -64,6 +64,10 @@ public class GameField extends JPanel
         am.put(MOVE_LEFT, new MoveLeftAction(pF));
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), MOVE_RIGHT);
         am.put(MOVE_RIGHT, new MoveRightAction(pF));
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), MOVE_UP);
+        am.put(MOVE_UP, new MoveUpAction(pF));
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), MOVE_DOWN);
+        am.put(MOVE_DOWN, new MoveDownAction(pF));
         
         /* xkloc=new int [this.liczkloc];
         ykloc=new int [this.liczkloc];
@@ -116,7 +120,41 @@ public class GameField extends JPanel
 		
 		
 	}
+	protected class MoveUpAction extends AbstractAction
+	{
+		protected PlayingField p;
+		public MoveUpAction(PlayingField pf)
+		{
+			p = pf;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			p.turn();
+			System.out.println("GORA");
+		}
+		
+		
+	}
 	
+	protected class MoveDownAction extends AbstractAction
+	{
+		protected PlayingField p;
+		public MoveDownAction(PlayingField pf)
+		{
+			p = pf;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			p.fastFall();
+			System.out.println("DOL");
+		}
+		
+		
+	}
 	
 	public void paintComponent(Graphics g)
 	{

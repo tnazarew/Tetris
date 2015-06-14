@@ -115,11 +115,11 @@ public class PlayingField
 		}
 	
 	}
-	public void move()
+	public void move(double yy)
 	{
 		if(animationOn)
 		{	
-			tB.moveDown();
+			tB.moveDown(yy);
 			//////////////
 		
 			if(checkCollision(tB.getCoordinates()))
@@ -127,7 +127,6 @@ public class PlayingField
 				Random r = new Random();
 				nextBlock(r.nextInt(7)+1);
 			}
-			VanishRowsIfFull();
 			/////////////
 			gF.repaint();
 
@@ -151,12 +150,13 @@ public class PlayingField
 				//startOfPreviousBlock = pushX + (i-1)*width/10 + 1;
 				//endOfNextBlock = pushX + (i+1)*width/10 - 1;
 				//if(d[2*j] > startOfPreviousBlock && d[2*j] < endOfNextBlock)
-				if(d[2*j]  == pushX + i*width/10)
+				if(d[2*j]  >= pushX + i*width/10 && d[2*j] < pushX + (i+1)*width/10 )
 				{
 					if(d[2*j + 1] >= pushY + ((19-this.highestPoint[i]))*height/20)
 					{
 						unmobilizeBlock(d, pushX +(i-1)*width/10 - d[2*j]);
 						return true;
+						
 					}
 				}
 			}
@@ -173,36 +173,73 @@ public class PlayingField
 		{
 			x = (int)( ( ( d[i]  - pushX + 1 )/width ) * 10 );
 			y = (int)( ( ( d[i+1] - pushY)/height )*20 );
-			tS[x][y].setVisible(true);
-			tS[x][y].setColor(tB.getColor());
-			this.highestPoint[x] =(20 - y > this.highestPoint[x]) ? 20 - y :  this.highestPoint[x];
-			
-		}
-		
+			if(y > 0 && y < 20)
+			{
+				tS[x][y].setVisible(true);
+				tS[x][y].setColor(tB.getColor());
+				this.highestPoint[x] =(20 - y > this.highestPoint[x]) ? 20 - y :  this.highestPoint[x];
+			}
+		}	
+		vanishRowsIfFull();
 	}
 	//Funkcja sprawdzająca czy zadany wiersz jest pełny
-	public boolean checkIfRowFull(int i)
+	public boolean checkIfRowFull(int y)
 	{
-		//TODO
+		for(int i = 0 ; i < 10; i++)
+		{
+			if(!tS[i][y].isVisible())
+			{
+				return false;
+			}
+		}
+		return true;
 		
-		return false;
+		
 	}
 	
-	public void VanishRowsIfFull()
+	public void vanishRowsIfFull()
 	{
 		for(int i = 0 ; i < 20 ; i++)
 		{
 			if(checkIfRowFull(i))
 			{
 				makeRowDissapear(i);
+				normalyze(i);
+				decraseHighestPoint();
 			}
 		}
 	}
 	
-	public void makeRowDissapear(int i)
+	public void decraseHighestPoint()
 	{
-		//TODO
+		for(int i = 0 ; i < 10 ; i++)
+		{
+			highestPoint[i]--;
+		}
+	}
+	
+	public void makeRowDissapear(int y)
+	{
+		for(int i = 0 ; i < 10; i++)
+		{
+			tS[i][y].setVisible(false);
+		}
 		
+	}
+	public void normalyze(int y)
+	{
+		for(int i = y; i > 0; i--)
+		{
+			for(int j = 0; j < 10 ; j++)
+			{
+				tS[j][i].setColor(tS[j][i-1].getColor());
+				tS[j][i].setVisible(tS[j][i-1].isVisible());
+			}
+		}
+		for(int j = 0 ; j < 10 ; j++)
+		{
+			tS[j][0].setVisible(false);
+		}
 	}
 	
 	public void moveSide(boolean rightLeft)
@@ -214,4 +251,17 @@ public class PlayingField
 	{
 		tB.turn();
 	}
+	public void fastFall()
+	{
+		tB.fastFall();
+	}
+	public double getHeight()
+	{
+		return height;
+	}
+	public double getLevel()
+	{
+		return 1;
+	}
+
 }
