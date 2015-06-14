@@ -305,4 +305,25 @@ public class PlayingField
 		return 1.0 + level/5;
 	}
 	
+	public void restart(int[] data)
+	{
+		score = 0;
+		level = data[1];
+		gF.setScore(0);
+		for(TetrisSquare[] tsq : tS)
+		{
+			for(TetrisSquare t : tsq)
+			{
+				t.setVisible(false);
+			}
+		}
+		for(int i = 4 ;i < data.length; i+=2)
+		{
+			tS[data[i]-1][data[i+1]-1].setVisible(true);
+			highestPoint[data[i]-1] = (21 - data[i] > highestPoint[data[i]-1]) ? 21 - data[i] : highestPoint[data[i] - 1];
+		}
+		Random r = new Random();
+		nextBlock(r.nextInt(7)+1);
+	}
+	
 }

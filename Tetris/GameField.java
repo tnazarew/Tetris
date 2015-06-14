@@ -194,7 +194,7 @@ public class GameField extends JPanel
 	}
 	public void setNewGame(int [] data, ObjectOutputStream oos)
 	{
-		pF = new PlayingField(this,this.getWidth() - this.additionalWidth, this.getHeight() - this.additionalHeight, this.additionalWidth/2, this.additionalHeight/2, xkloc, ykloc, data[2], oos);
+		pF.restart(data);
 	}
 
 }
