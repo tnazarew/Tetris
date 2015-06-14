@@ -2,6 +2,7 @@ package Tetris;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JMenuItem;
 
@@ -13,9 +14,11 @@ import javax.swing.JMenuItem;
 public class MenuListener implements ActionListener
 {
 	private TetrisView tv;
-	public MenuListener(TetrisView t)
+	ObjectOutputStream o; 
+	public MenuListener(TetrisView t, ObjectOutputStream oos )
 	{
 		tv = t;
+		o = oos;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e)

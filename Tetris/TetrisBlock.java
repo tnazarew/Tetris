@@ -39,8 +39,8 @@ public abstract class TetrisBlock
 		a = aa;
 		anchorX = xx;
 		anchorY = yy;
-		x = xx;
-		y = yy;
+		x = xx + 4*a;
+		y = yy - 4*a;
 		nums = new int[4];
 		nums[0] = fi;
 		nums[1] = s;

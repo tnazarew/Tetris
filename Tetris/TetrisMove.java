@@ -21,7 +21,7 @@ public class TetrisMove extends Thread
 			p.move(1.0);
 			try {
 				
-				sleep((long) ((20000/(1+p.getHeight()))));
+				sleep((long) ((20000/(p.getLevel()*p.getHeight()))));
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

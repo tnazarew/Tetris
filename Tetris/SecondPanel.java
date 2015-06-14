@@ -24,14 +24,14 @@ public class SecondPanel extends JPanel
 	private PauseUnpause pup;
 	private Wyjscie ex;
 	public Integer nrpoz;
-	public SecondPanel(JFrame jp, Configuration conf)
+	public SecondPanel(TetrisView tv,int[] data)
 	{
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints co = new GridBagConstraints();
-		this.nrpoz=conf.nr_poziomu;
+		this.nrpoz=data[2];
 		
 		bests = new JButton("Lista najlepszych");
-		punkty = new JLabel("Zdobyłeś [] punktów", JLabel.CENTER);
+		punkty = new JLabel("Zdobyłeś punktów " + (new Integer(0).toString()), JLabel.CENTER);
 		punkty.setForeground(new Color(0xffffdd));
 		poziom = new JLabel("Grasz na poziomie "+nrpoz.toString() , JLabel.CENTER);
 		poziom.setForeground(new Color(0xffffdd));
@@ -82,5 +82,16 @@ public class SecondPanel extends JPanel
 		
  
 		this.setBackground(Color.BLUE);
+	}
+	
+	public void setScore(int i)
+	{
+		punkty.setText("Zdobyłeś punktów " + (new Integer(i).toString()));
+	}
+	
+	public void setNewGame(int [] data)
+	{
+		punkty.setText("Zdobyłeś punktów " + (new Integer(0).toString()));
+		nrpoz = data[2];
 	}
 }

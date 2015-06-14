@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.ObjectOutputStream;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -32,33 +33,33 @@ public class GameField extends JPanel
     private static final String MOVE_DOWN = "move down";
     private static final String  MOVE_LEFT = "move left";
     private static final String  MOVE_RIGHT	= "move right";
+	private TetrisView t;
 	
 	
 	
-	
-	public GameField(Configuration conf)
+	public GameField(int[] data, ObjectOutputStream oos, TetrisView tv)
 	{
 		additionalWidth = 0;
 		additionalHeight = 0;
 		
-        this.liczkloc=conf.liczba_kloc;
+        this.liczkloc=data[3];
         xkloc = new int[liczkloc];
         ykloc = new int[liczkloc];		
-
-        System.arraycopy(conf.x_kloc, 0, this.xkloc, 0, this.liczkloc);
-        System.arraycopy(conf.y_kloc, 0, this.ykloc, 0, this.liczkloc);
+        int j =0; 
+        for(int i = 0; i+5 < data.length; i+=2, j++)
+        {
+        	xkloc[j] = data[i+4];
+        	ykloc[j] = data[i+5];
+        }
         setFocusable(true);
 
         InputMap im = getInputMap(WHEN_FOCUSED);
         ActionMap am = getActionMap();
-        
+        t = tv;
         
 
         
-        pF = new PlayingField(this,this.getWidth() - this.additionalWidth, this.getHeight() - this.additionalHeight, this.additionalWidth/2, this.additionalHeight/2, xkloc, ykloc);
-        //m = new MoveKeyListener();
-		//m.setPlayingField(pF);
-		//this.addKeyListener(m);
+        pF = new PlayingField(this,this.getWidth() - this.additionalWidth, this.getHeight() - this.additionalHeight, this.additionalWidth/2, this.additionalHeight/2, xkloc, ykloc, data[2], oos);
        
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), MOVE_LEFT);
         am.put(MOVE_LEFT, new MoveLeftAction(pF));
@@ -69,16 +70,6 @@ public class GameField extends JPanel
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), MOVE_DOWN);
         am.put(MOVE_DOWN, new MoveDownAction(pF));
         
-        /* xkloc=new int [this.liczkloc];
-        ykloc=new int [this.liczkloc];
-        
-        for(int i=0;i<liczkloc;i++)
-        {
-            xkloc=x_kloc;
-        }*/
-
-       // for(int i:ykloc)
-        //{System.out.println(i);}
         /**Metoda rysująca komponent oraz kilka przykładowych klocków
          * g jest to obiekt klasy Graphics2D
          * 
@@ -169,27 +160,7 @@ public class GameField extends JPanel
 		}
 		
 		pF.draw(g2);
-		/*g2.draw(new Rectangle2D.Double(additionalWidth/2,additionalHeight/2, this.getWidth()- additionalWidth , this.getHeight()-additionalHeight));
-		TetrisBlock t1 = new BlockI(g2, additionalWidth/2 + xkloc[0]*(this.getWidth()- additionalWidth)/10,additionalHeight/2 + ykloc[0]*(this.getHeight()-additionalHeight)/20, (this.getHeight()-additionalHeight)/20);
-		t1.draw();
 		
-		TetrisBlock t2 = new BlockJ(g2, additionalWidth/2 + xkloc[1]*(this.getWidth()- additionalWidth)/10,additionalHeight/2 + ykloc[1]*(this.getHeight()-additionalHeight)/20, (this.getHeight()-additionalHeight)/20);
-		t2.draw();
-		
-		/*TetrisBlock t3 = new BlockO(g2, additionalWidth/2 + 2*(this.getWidth()- additionalWidth)/10,additionalHeight/2 + 6*(this.getHeight()-additionalHeight)/20, (this.getHeight()-additionalHeight)/20);
-		t3.draw();
-		
-		TetrisBlock t4 = new BlockS(g2, additionalWidth/2 + 3*(this.getWidth()- additionalWidth)/10,additionalHeight/2 + 18*(this.getHeight()-additionalHeight)/20, (this.getHeight()-additionalHeight)/20);
-		t4.draw();
-		
-		TetrisBlock t5 = new BlockZ(g2, additionalWidth/2 + 7*(this.getWidth()- additionalWidth)/10,additionalHeight/2 + 13*(this.getHeight()-additionalHeight)/20, (this.getHeight()-additionalHeight)/20);
-		t5.draw();
-		
-		TetrisBlock t6 = new BlockL(g2, additionalWidth/2 + 8*(this.getWidth()- additionalWidth)/10,additionalHeight/2 + 17*(this.getHeight()-additionalHeight)/20, (this.getHeight()-additionalHeight)/20);
-		t6.draw();
-		
-		TetrisBlock t7 = new BlockT(g2, additionalWidth/2 + 7*(this.getWidth()- additionalWidth)/10,additionalHeight/2 + 5*(this.getHeight()-additionalHeight)/20, (this.getHeight()-additionalHeight)/20);
-		t7.draw();*/
 	}
 	
 	private boolean matchProportions()
@@ -216,6 +187,14 @@ public class GameField extends JPanel
 	public void startStopAnimation(boolean b)
 	{
 		pF.startStopAnimation(b);
+	}
+	public void setScore(int i)
+	{
+		t.setScore(i);
+	}
+	public void setNewGame(int [] data, ObjectOutputStream oos)
+	{
+		pF = new PlayingField(this,this.getWidth() - this.additionalWidth, this.getHeight() - this.additionalHeight, this.additionalWidth/2, this.additionalHeight/2, xkloc, ykloc, data[2], oos);
 	}
 
 }

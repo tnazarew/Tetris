@@ -1,5 +1,7 @@
 package Tetris;
 
+import java.io.ObjectOutputStream;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -14,29 +16,35 @@ import javax.swing.JMenuItem;
 public class TetrisMenu extends JMenuBar
 {
 	public int liczpoz;
-	TetrisMenu(TetrisView tv)
+	TetrisMenu(TetrisView tv, int[] data, ObjectOutputStream oos )
 	{
+		JMenuItem level;
+		MenuListener l = new MenuListener(tv, oos);
+		JMenu menu = new JMenu("Wybór poziomu");
 		//this.liczpoz=conf.liczba_poziomow;
+		for(int i = 0 ; i < data[0] ; i ++)
+		{
+			level = new JMenuItem(((new Integer(i+1)).toString()));
+			level.addActionListener(l);
+			menu.add(level);
+			
+		}
 		
-		JMenuItem  easy = new JMenuItem("(1) - łatwy");
-		JMenuItem normal = new JMenuItem("(2) - średni");
-		JMenuItem hard = new JMenuItem("(3) - trudny");
+		
 	
         JMenu animation = new JMenu("GRA");
         JMenuItem on = new JMenuItem("ON");
         JMenuItem off = new JMenuItem("OFF");
-        MenuListener l = new MenuListener(tv);
+        
         on.addActionListener(l);
         off.addActionListener(l);
         animation.add(on);
         animation.add(off);
-        easy.addActionListener(l);
-        normal.addActionListener(l);
-        hard.addActionListener(l);
-        JMenu menu = new JMenu("Wybór poziomu");
-        menu.add(easy);
-        menu.add(normal);
-        menu.add(hard);
+        
+
+       
+        
+        
         add(menu);
 		add(animation);
 		       

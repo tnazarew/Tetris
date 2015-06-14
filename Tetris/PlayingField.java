@@ -3,14 +3,19 @@ package Tetris;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Random;
+
+import Server.MessageObject;
 
 public class PlayingField 
 {
 	private int highestPoint[];
 	private GameField gF;
 	private TetrisMove tm;
-
+	private int score;
+	private double level;
 	private boolean animationOn;
 	private double pushX;
 	private double pushY;
@@ -20,16 +25,19 @@ public class PlayingField
     public int ykloc[];
 	TetrisBlock tB;
 	TetrisSquare tS[][];
+	ObjectOutputStream o;
 	
-	PlayingField(GameField g,double pX, double pY, double w, double h, int[] xk, int[] yk)
+	PlayingField(GameField g, double pX, double pY, double w, double h, int[] xk, int[] yk, double lev, ObjectOutputStream oos)
 	{
+		score = 0;
+		o = oos;
 		gF = g;
 		animationOn = false;
 		pushX = pX;
 		pushY = pY;
 		width = w;
 		height = h;
-		
+		level = lev;
 		tB = new BlockO(pushX, pushY, width/10+1);
 		tB.setVisible(true);
 		this.highestPoint = new int[10];
@@ -154,7 +162,7 @@ public class PlayingField
 				{
 					if(d[2*j + 1] >= pushY + ((19-this.highestPoint[i]))*height/20)
 					{
-						unmobilizeBlock(d, pushX +(i-1)*width/10 - d[2*j]);
+						unmobilizeBlock(d);
 						return true;
 						
 					}
@@ -165,13 +173,18 @@ public class PlayingField
 		return false;
 	}
 
-	private void unmobilizeBlock(double[] d, double r)
+	private void unmobilizeBlock(double[] d)
 	{
 		int x;
 		int y;
 		for( int i = 0 ; i < 8; i+=2)
 		{
 			x = (int)( ( ( d[i]  - pushX + 1 )/width ) * 10 );
+			if(d[i+1] - pushY < 0) 
+			{
+				endGame();
+				return;
+			}
 			y = (int)( ( ( d[i+1] - pushY)/height )*20 );
 			if(y > 0 && y < 20)
 			{
@@ -196,7 +209,19 @@ public class PlayingField
 		
 		
 	}
-	
+	private void endGame()
+	{
+		String[] s = new String[1];
+		s[0] = "NEW_TOP_SCORE";
+		MessageObject m = new MessageObject(score, s, (int[])null);
+		try {
+			o.writeObject(m);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		startStopAnimation(false);
+	}
 	public void vanishRowsIfFull()
 	{
 		for(int i = 0 ; i < 20 ; i++)
@@ -206,15 +231,31 @@ public class PlayingField
 				makeRowDissapear(i);
 				normalyze(i);
 				decraseHighestPoint();
+				score += 100;
+				gF.setScore(score);
 			}
 		}
 	}
 	
 	public void decraseHighestPoint()
 	{
+		boolean emptyColumn;
 		for(int i = 0 ; i < 10 ; i++)
 		{
-			highestPoint[i]--;
+			emptyColumn = true;
+			for(int j = 0; j < 20 ; j++)
+			{
+				if(tS[i][j].isVisible())
+				{
+					highestPoint[i] = 20 - j;
+					emptyColumn = false;
+					break;
+				}
+			}
+			if(emptyColumn)
+			{
+				highestPoint[i] = 0;
+			}
 		}
 	}
 	
@@ -261,7 +302,7 @@ public class PlayingField
 	}
 	public double getLevel()
 	{
-		return 1;
+		return 1.0 + level/5;
 	}
-
+	
 }
